@@ -46,27 +46,27 @@ last(['jumpkick', 'roundhouse', 'uppercut']);
 //=> 'uppercut'
 ```
 
-`reverse` вернет перевернутый список в котором, затем, `head` выдернет начальный элемент. Это и будет результат эффектной, хотя и не эффективной, функции `last`. Последовательность функций в композиции здесь очевидна. We could define a left to right version, however, we mirror the mathematical version much more closely as it stands. That's right, composition is straight from the math books. In fact, perhaps it's time to look at a property that holds for any composition.
+`reverse` вернет перевернутый список в котором, затем, `head` выдернет начальный элемент. Это и будет результат эффектной, хотя и не эффективной, функции `last`. Последовательность функций в композиции здесь очевидна. Мы могли бы определить и вариант с движением "слева на право", однако, мы изображаем математическое определение как можно точнее. Это правило композиции взято прям из книги по математике. В самом деле, пришло время посмотреть на свойство которым должна обладать любая композиция.
 
 ```js
-// associativity
+// ассоциативность
 var associative = compose(f, compose(g, h)) == compose(compose(f, g), h);
 // true
 ```
 
-Composition is associative, meaning it doesn't matter how you group two of them. So, should we choose to uppercase the string, we can write:
+Композиция ассоциативна, то есть не имеет значания как групировать две композиции. Так. например, если надо сделать в последней строке быквы заглавными, мы можем написать:
 
 ```js
 compose(toUpperCase, compose(head, reverse));
 
-// or
+// или
 compose(compose(toUpperCase, head), reverse);
 ```
 
-Since it doesn't matter how we group our calls to `compose`, the result will be the same. That allows us to write a variadic compose and use it as follows:
+Поскольку групировка вызовов `compose` не имеет значения, результат будет одинаковым. Это позволяет писать вариативные композиции и использовать их таким образом:
 
 ```js
-// previously we'd have to write two composes, but since it's associative, we can give compose as many fn's as we like and let it decide how to group them.
+// сначала мы написали две композиции, но, поскольку композиция ассоциативна, мы можем передать в нее столько функций сколько нужно и получить решение как их группировку.
 var lastUpper = compose(toUpperCase, head, reverse);
 
 lastUpper(['jumpkick', 'roundhouse', 'uppercut']);
@@ -79,23 +79,23 @@ loudLastUpper(['jumpkick', 'roundhouse', 'uppercut']);
 //=> 'UPPERCUT!'
 ```
 
-Applying the associative property gives us this flexibility and peace of mind that the result will be equivalent. The slightly more complicated variadic definition is included with the support libraries for this book and is the normal definition you'll find in libraries like [lodash][lodash-website], [underscore][underscore-website], and [ramda][ramda-website].
+Применение свойства ассоциативности дает нам гибкость и уверенность в эквивалентности результатов. Чуть более сложно вариативное определение с поддержкой библиотек их этой книги и нормальное определение Вы найдёте в библиотеках библиотеках наподобие [lodash][lodash-website], [underscore][underscore-website] и [ramda][ramda-website].
 
-One pleasant benefit of associativity is that any group of functions can be extracted and bundled together in their very own composition. Let's play with refactoring our previous example:
+Одна из прелестей ассоциативности в том, что любая группа функций может быть разбита и вновь собрана в собственном порядке. Давайте изменим наш предыдущий пример:
 
 ```js
 var loudLastUpper = compose(exclaim, toUpperCase, head, reverse);
 
-// or
+// или
 var last = compose(head, reverse);
 var loudLastUpper = compose(exclaim, toUpperCase, last);
 
-// or
+// или
 var last = compose(head, reverse);
 var angry = compose(exclaim, toUpperCase);
 var loudLastUpper = compose(angry, last);
 
-// more variations...
+// много вариантов ...
 ```
 
 There's no right or wrong answers - we're just plugging our legos together in whatever way we please. Usually it's best to group things in a reusable way like `last` and `angry`. If familiar with Fowler's "[Refactoring][refactoring-book]", one might recognize this process as "[extract method][extract-method-refactor]"...except without all the object state to worry about.
