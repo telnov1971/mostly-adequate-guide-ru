@@ -1,8 +1,8 @@
-# Chapter 5: Coding by Composing
+# Часть 5: Кодирование с помощью композиции
 
-## Functional husbandry
+## Функциональщина
 
-Here's `compose`:
+Вот функция `compose`:
 
 ```js
 var compose = function(f,g) {
@@ -12,9 +12,9 @@ var compose = function(f,g) {
 };
 ```
 
-`f` and `g` are functions and `x` is the value being "piped" through them.
+`f` и `g` функции и `x` это значение "тунелированное" через них.
 
-Composition feels like function husbandry. You, breeder of functions, select two with traits you'd like to combine and mash them together to spawn a brand new one. Usage is as follows:
+Композиция позволяет полюбить функциональный подход. Вы, создатель функций, выбираете две с характеристиками, которые Вам хотелось скомбинировать, и смешиваете их вместе для получения новой функции. Вот так:
 
 ```js
 var toUpperCase = function(x) { return x.toUpperCase(); };
@@ -25,9 +25,9 @@ shout("send in the clowns");
 //=> "SEND IN THE CLOWNS!"
 ```
 
-The composition of two functions returns a new function. This makes perfect sense: composing two units of some type (in this case function) should yield a new unit of that very type. You don't plug two legos together and get a lincoln log. There is a theory here, some underlying law that we will discover in due time.
+Композиция двух функций возвращает новую функцию. Это значит: композиция двух блоков некоторого типа (в нашем случае функции) должна давать новый блок того же самого типа. Вы не можете соединить вместе два лего и получить детальку из конструктора "Lincoln Logs". Это теория, некоторые основные законы, которые мы обсудим в своё время.
 
-In our definition of `compose`, the `g` will run before the `f`, creating a right to left flow of data. This is much more readable than nesting a bunch of function calls. Without compose, the above would read:
+В нашем определении `compose`, функция `g` будет выполнена перед `f`, производя поток данных "справа на лево". Это более читабельно, чем куча вызовов функций. Без композиции получилось бы вот так:
 
 ```js
 var shout = function(x){
@@ -35,7 +35,7 @@ var shout = function(x){
 };
 ```
 
-Instead of inside to outside, we run right to left, which I suppose is a step in the left direction[^boo]. Let's look at an example where sequence matters:
+Вместо следования изнутри наружу, мы идём справо на лево. Давайте рассмотрим пример с последовательностью:
 
 ```js
 var head = function(x) { return x[0]; };
@@ -46,7 +46,7 @@ last(['jumpkick', 'roundhouse', 'uppercut']);
 //=> 'uppercut'
 ```
 
-`reverse` will turn the list around while `head` grabs the initial item. This results in an effective, albeit inefficient, `last` function. The sequence of functions in the composition should be apparent here. We could define a left to right version, however, we mirror the mathematical version much more closely as it stands. That's right, composition is straight from the math books. In fact, perhaps it's time to look at a property that holds for any composition.
+`reverse` вернет перевернутый список в котором, затем, `head` выдернет начальный элемент. Это и будет результат эффектной, хотя и не эффективной, функции `last`. Последовательность функций в композиции здесь очевидна. We could define a left to right version, however, we mirror the mathematical version much more closely as it stands. That's right, composition is straight from the math books. In fact, perhaps it's time to look at a property that holds for any composition.
 
 ```js
 // associativity
